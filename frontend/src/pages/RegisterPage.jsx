@@ -14,7 +14,7 @@ const RegisterPage = () => {
     setError("");
 
     try {
-      await axios.post("http://localhost:5000/api/register", {
+      await axios.post("https://amrutam-fullstack-app.onrender.com/api/register",{
         name,
         email,
         password,
