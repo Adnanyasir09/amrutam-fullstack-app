@@ -4,15 +4,17 @@ import { Link } from "react-router-dom";
 const TopBar = () => {
   const [showPhone, setShowPhone] = useState(false);
   const [user, setUser] = useState(null);
+  
 
+  // Toggle phone text every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setShowPhone((prev) => !prev);
     }, 3000);
-
     return () => clearInterval(interval);
   }, []);
 
+  // Load user from localStorage
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -20,14 +22,21 @@ const TopBar = () => {
     }
   }, []);
 
+  // Logout handler
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+    // Optionally redirect after logout
+    // navigate("/login");
+  };
+
   return (
     <div className="h-[50px] bg-[#2d2d2d] text-white px-4 py-2 text-sm flex items-center justify-between relative">
-
+      
       {/* Left side - Call Button */}
       <div className="flex-shrink-0">
         <button className="bg-green-700 hover:bg-green-500 text-white px-3 py-1 rounded transition-all duration-300 ease-in-out overflow-hidden relative flex items-center justify-start">
           <span className="z-10 ml-2 mr-2 text-xl">📞</span>
-
           <div className="relative overflow-hidden">
             <span
               className={`block transition-opacity duration-500 ease-in-out ${
@@ -52,12 +61,20 @@ const TopBar = () => {
         <p>Your first 5 minutes instant call is free</p>
       </div>
 
-      {/* Right side - Login/Welcome */}
+      {/* Right side - Login/Welcome/Logout */}
       <div className="flex items-center gap-3">
         {user ? (
-          <span className="text-sm font-medium">
-            Welcome, {user.name?.split(" ")[0] || "User"}
-          </span>
+          <>
+            <span className="text-sm font-medium">
+              Welcome, {user.name?.split(" ")[0] || "User"}
+            </span>
+            <button
+              onClick={handleLogout}
+              className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-white"
+            >
+              Logout
+            </button>
+          </>
         ) : (
           <Link to="/login">
             <button className="bg-gray-700 hover:bg-gray-800 px-3 py-1 rounded">
